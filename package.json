@@ -1,27 +1,40 @@
 {
   "name": "dynamic-dynamo-lambda",
-  "version": "0.1.0",
-  "description": "use dynamic dynamo by lambda!",
+  "version": "1.0.0",
+  "description": "Autoscaling Lambda Dynamic DynamoDB",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "rockeee <cuhaha1203@gmail.com>",
+  "contributors": [
+    "AnguloHerrera <anguloherrera93@gmail.com> (https://github.com/AnguloHerrera)",
+    "mlilius <> (https://github.com/mlilius)"
+  ],
   "license": "MIT",
   "dependencies": {
-    "async": "^1.5.0",
-    "aws-sdk": "^2.2.20"
+    "nconf": "^0.8",
+	  "command-line-args": "^3.0.1",
+    "aws-sdk": "^2.5",
+    "child_process": "^1.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
   "keywords": [
-    "dynamoDB"
+    "dynamoDB",
+    "autoscale AWS"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/rockeee/dynamic-dynamodb-lambda.git"
+    "url": "https://github.com/touchvie/dynamic-dynamodb-lambda.git"
+  },
+  "scripts": {
+    "test": "mocha $(find test -name '*.test.js')",
+    "setup": "node-lambda setup",
+    "run": "node-lambda run",
+    "deploy": "node-lambda deploy"
   },
   "bugs": {
-    "url": "https://github.com/rockeee/dynamic-dynamodb-lambda/issues"
+    "url": "https://github.com/touchvie/dynamic-dynamodb-lambda/issues"
   },
   "homepage": "https://github.com/rockeee/dynamic-dynamodb-lambda"
 }

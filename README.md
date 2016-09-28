@@ -1,99 +1,1 @@
-# Dynamic DynamoDB - lambda
- Use DynamoDB autoscaling with lambda!<br />
- It's [Dynamic DynamoDB](https://github.com/sebdah/dynamic-dynamodb)'s simple lambda version
-
-##### functional/running test passed. but before use, Test it please
-##### please give me any report/suggestion, Welcome
-
-## Feature
-* autoscale DynamoDB's provisioned read/write capacity
-* run by lambda functon with scheduled event
-
-## File Structure
-* **index.js** - main handler & flow source. using [async](https://github.com/caolan/async)
-* **tasks.js** - Detail work sources. using AWS SDK
-* **config.js** - capacity scaling rule configuration
-
-## How to use
-1. `$ git clone https://github.com/rockeee/dynamic-dynamodb-lambda.git` or download zip
-2. `$ npm install` to download npm modules
-3. modify `config.js` for your configuration.
-  * almost same with [Dynamic DynamoDB's option](https://github.com/sebdah/dynamic-dynamodb#basic-usage)
-   ```js
-  module.exports = {
-    region : 'us-west-2', // region
-    timeframeMin : 5, // evaluation timeframe (minute)
-    tables :
-        [
-            {
-            tableName : 'testTable',     // table name
-            reads_upper_threshold : 90,  // read incrase threshold (%)
-            reads_lower_threshold : 30,  // read decrase threshold (%)
-            increase_reads_with : 90,    // read incrase amount (%)
-            decrease_reads_with : 30,    // read decrase amount (%)
-            base_reads : 5,              // minimum read Capacity
-            high_reads : 100,            // maximum read Capacity
-            writes_upper_threshold : 90, // write incrase amount (%)
-            writes_lower_threshold : 40, // write decrase amount (%)
-            increase_writes_with : 90,   // write incrase amount (%)
-            decrease_writes_with : 30,   // write incrase amount (%)
-            base_writes : 5,             // minimum write Capacity
-            high_writes : 300            // maximum write Capacity
-            }
-            ,
-            {
-            tableName : 'testTable2',
-            reads_upper_threshold : 90,
-            reads_lower_threshold : 30,
-            increase_reads_with : 0,     // to don't scale up reads
-            decrease_reads_with : 0,     // to don't scale down reads
-            base_reads : 3,
-            high_reads : 100,
-            writes_upper_threshold : 90,
-            writes_lower_threshold : 40,
-            increase_writes_with : 0,    // to don't scale up writes
-            decrease_writes_with : 0,    // to don't scale down writes
-            base_writes : 3,
-            high_writes : 300
-            }
-            // additional table...
-        ]
-};
-```
-4. deploy to lamda function with your favorite method (just zip, or use tool like [node-lambda](https://www.npmjs.com/package/node-lambda))
-5. check lambda function's configuration
-  * memory - 128MB, timeout - 10sec
-  * set `Cloudwatch Event Rule` to run your lambda function. for detail, refer [this](https://aws.amazon.com/blogs/aws/new-cloudwatch-events-track-and-respond-to-changes-to-your-aws-resources/)
-  * set & attach `role` to lambda function
-  * example role policy
-   ```json
-    {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "",
-            "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:UpdateTable",
-                "CloudWatch:getMetricStatistics"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        },
-        {
-            "Sid": "",
-            "Resource": "*",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-```
-
-## Roadmap
-* more stable
-* add SNS noti when scaled/failed
+# Dynamic DynamoDB - lambdaForked from the [rockeee](https://github.com/rockeee) project:	[Dynamic DynamoDB Lambda](https://github.com/rockeee/dynamic-dynamodb-lambda) Use DynamoDB autoscaling with lambda.<br /> It's [Dynamic DynamoDB](https://github.com/sebdah/dynamic-dynamodb)'s lambda version.##### functional/running test passed. but before use, Test it please##### please give me any report/suggestion, Welcome## Feature* autoscale DynamoDB's provisioned read/write capacity* run by lambda functon with scheduled event## New features in this fork* Global Secondary Index support* Enable/Disable read/write autoscaling in config json file* Throttle Events in CloudWatch support* Enable/Disable throttle-read/throttle-write checking in config json file* Added test to lambda## File Structure* **index.js** - main handler & flow source. using [async](https://github.com/caolan/async)* **tasks.js** - Detail work sources. using AWS SDK* **config.js** - capacity scaling rule configuration## How to use1. `$ git clone https://github.com/touchvie/dynamic-dynamodb-lambda.git` or download zip2. `$ npm install` to download npm modules3. modify `config.js` for your configuration.  * almost same with [Dynamic DynamoDB's option](https://github.com/sebdah/dynamic-dynamodb#basic-usage)   ```JavaScript{	"region": "us-west-2",	"timeframeMin": 5, // evaluation timeframe (minute)	"tables": [		{			"tableName": "testTable", // table name			"enable_read": 1, // value 1 activates read autoscaling, value 0 disactivates it			"enable_read_throttle": 0, // read throttle events autoscaling is disabled			"reads_upper_threshold" : 90, // read incrase threshold (%)			"reads_lower_threshold" : 30, // read decrase threshold (%)			"increase_reads_with" : 90, // read incrase amount (%)			"decrease_reads_with" : 30, // read decrase amount (%)			"base_reads" : 5,          // minimum read Capacity			"high_reads" : 100,        // maximum read Capacity			"enable_write": 0, // the following fields are ignored because write autoscaling is disabled			"enable_write_throttle": 0, // write throttle events autoscaling is disabled			"writes_upper_threshold": "",			"writes_lower_threshold": "",			"increase_writes_with": "",			"decrease_writes_with": "",			"base_writes": "",			"high_writes": ""		},		{			"tableName": "testTable1", // table name			"gsiName": "hash-testTable1-index", // Global Secondary Index of testTable1 table			"enable_read": 1,			"enable_read_throttle": 1, // read throttle events autoscaling is enabled			"reads_upper_threshold" : 90,			"reads_lower_threshold" : 30,			"increase_reads_with" : 0, // to don't scale up reads			"decrease_reads_with" : 0, // to don't scale down reads			"base_reads" : 5,			"high_reads" : 100,			"enable_write": 1, // value 1 activates write autoscaling, value 0 disactivates it			"enable_write_throttle": 1, // write throttle events autoscaling is enabled			"writes_upper_threshold" : 90, // write incrase amount (%)			"writes_lower_threshold" : 40, // write decrase amount (%)			"increase_writes_with" : 90, // write incrase amount (%)			"decrease_writes_with" : 30, // write incrase amount (%)			"base_writes" : 3, // minimum write Capacity			"high_writes" : 100 // maximum write Capacity		} 		//... 		]}```4. deploy to lamda function with your favorite method (just zip, or use tool like [node-lambda](https://www.npmjs.com/package/node-lambda))5. check lambda function's configuration  * memory - 128MB, timeout - 10sec  * set `Cloudwatch Event Rule` to run your lambda function. for detail, refer [this](https://aws.amazon.com/blogs/aws/new-cloudwatch-events-track-and-respond-to-changes-to-your-aws-resources/)  * set & attach `role` to lambda function  * example role policy   ```json    {    "Version": "2012-10-17",    "Statement": [        {            "Sid": "",            "Action": [                "dynamodb:DescribeTable",                "dynamodb:UpdateTable",                "CloudWatch:getMetricStatistics"            ],            "Effect": "Allow",            "Resource": "*"        },        {            "Sid": "",            "Resource": "*",            "Action": [                "logs:CreateLogGroup",                "logs:CreateLogStream",                "logs:PutLogEvents"            ],            "Effect": "Allow"        }    ]}```## Contributors* [AnguloHerrera](https://github.com/AnguloHerrera) <anguloherrera93@gmail.com>* [mlilius](https://github.com/mlilius)## Roadmap* more stable* add SNS noti when scaled/failed

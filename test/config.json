@@ -1,0 +1,26 @@
+{
+    "region": "us-west-2",
+    "timeframeMin": 3,
+    "debug": 1,
+    "tables": [
+        {
+            "tableName": "development_test",
+            "enable_read": 1,
+            "enable_read_throttle": 0,
+            "reads_upper_threshold": 80,
+            "reads_lower_threshold": 40,
+            "increase_reads_with": 80,
+            "decrease_reads_with": 40,
+            "base_reads": 1,
+            "high_reads": 10,
+            "enable_write": 1,
+            "enable_write_throttle": 0,
+            "writes_upper_threshold": 80,
+            "writes_lower_threshold": 40,
+            "increase_writes_with": 80,
+            "decrease_writes_with": 40,
+            "base_writes": 1,
+            "high_writes": 10
+        }
+    ]
+}

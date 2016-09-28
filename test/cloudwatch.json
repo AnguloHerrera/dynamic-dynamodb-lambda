@@ -1,0 +1,16 @@
+{
+    "read": {
+        "Datapoints": [
+            {
+                "Sum": 10
+            }
+        ]
+    },
+    "write": {
+        "Datapoints": [
+            {
+                "Sum": 10
+            }
+        ]
+    }
+}

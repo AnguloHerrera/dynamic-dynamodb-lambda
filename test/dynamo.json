@@ -1,0 +1,22 @@
+{
+    "Table": {
+        "TableName": "development_test",
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1,
+            "NumberOfDecreasesToday": 0
+        },
+        "TableStatus": "ACTIVE",
+        "GlobalSecondaryIndexes": [
+            {
+                "IndexName": "key-index",
+                "IndexStatus": "ACTIVE",
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": 1,
+                    "WriteCapacityUnits": 1,
+                    "NumberOfDecreasesToday": 0
+                }
+            }
+        ]
+    }
+}
